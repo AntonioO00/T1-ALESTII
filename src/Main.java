@@ -1,14 +1,12 @@
+import Calculo.CalculoRota;
 
-import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-
 public class Main {
     public static void main(String[] args) {
-
         char[][] matriz;
-        String teste = "C:\\Users\\anton\\OneDrive\\Documentos\\Programas\\T2-ALEST2\\casosdeteste\\casoC50.txt";
+        String teste = "C:\\Users\\victor\\Documents\\T2-ALEST2\\casosdeteste\\casoC50.txt";
 
         try {
             // Leitura da primeira linha
@@ -41,13 +39,12 @@ public class Main {
                 }
                 System.out.println();
             }
+            CalculoRota calculoRota = new CalculoRota(matriz);
+            calculoRota.calculo();
+
 
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 }
-
-
-
-
