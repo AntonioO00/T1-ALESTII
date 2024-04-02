@@ -9,7 +9,7 @@ public class CalculoRota {
 
     public int coordenada() {
     int linha= 0;
-     for(int i=0 ; i<tetris.length-1; i++){
+     for(int i=0; i <tetris.length-1; i++){
         if (tetris[i][0] == '-') {
             linha = i;
         }
