@@ -6,7 +6,7 @@ import java.io.FileReader;
 public class Main {
     public static void main(String[] args) {
         char[][] matriz;
-        String teste = "C:\\Users\\victor\\Documents\\T2-ALEST2\\casosdeteste\\casoC50.txt";
+        String teste = "casosdeteste/casoC50.txt";
 
         try {
             // Leitura da primeira linha
