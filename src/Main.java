@@ -6,7 +6,7 @@ import java.io.FileReader;
 public class Main {
     public static void main(String[] args) {
         char[][] matriz;
-        String teste = "casosdeteste/casoC50.txt";
+        String teste = "casosdeteste/casoC100.txt";
 
         try {
             // Leitura da primeira linha
