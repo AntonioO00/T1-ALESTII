@@ -41,7 +41,8 @@ public class Main {
             }
             CalculoRota calculoRota = new CalculoRota(matriz);
             calculoRota.calculo();
-            calculoRota.LeituraMatriz();
+            System.out.println(calculoRota.LeituraMatriz());
+
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
