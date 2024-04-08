@@ -1,10 +1,14 @@
 package Calculo;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Arrays;
 
 public class CalculoRota {
     char[][] tetris;
     int i, j = 0;
+    Long somador = 0L;
+    String valores = "";
 
     public CalculoRota(char[][] matriz) {
         tetris = matriz;
@@ -24,15 +28,15 @@ public class CalculoRota {
         System.out.println(coordenada() + 1);
     }
 
+    public Long getSomador() {
+        return somador;
+    }
 
-    public long LeituraMatriz() {
+    public Long LeituraMatriz() {
 
-        System.out.println("tetris[i][j] gamde");
         int i = coordenada();
         int j = 0;
         boolean x = true;
-        String valores = "";
-
 
         while (tetris[i][j] != '#') {
 
@@ -40,19 +44,17 @@ public class CalculoRota {
             while (x == true) {
 
                 if (tetris[i][j] == '#') {
-                    System.out.println("Final");
+                    return somador;
                 }
                 //subindo
                 if (tetris[i][j] == '/') {
                     i--;
                     while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
                         if (Character.isDigit(tetris[i][j])) {
-                            valores += String.valueOf(tetris[i][j]);
-                            //aqui
+                            sequencia(i, j, "cima");
                         }
-                        System.out.println("Subiu");
                         if (tetris[i][j] == '#') {
-                            System.out.println("Final");
+                            return somador;
                         }
                         i--;
                     }
@@ -60,7 +62,6 @@ public class CalculoRota {
                     if (tetris[i][j] == '\\') {
                         x = false;
                         j -= 2;
-                        System.out.println("foi pra esquerda subindo");
                     }
                 }
 
@@ -69,27 +70,25 @@ public class CalculoRota {
                     i++;
                     while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
                         if (Character.isDigit(tetris[i][j])) {
-                            valores = String.valueOf(tetris[i][j]);
+                            sequencia(i, j, "baixo");
                         }
-                        System.out.println("Desceu");
-                        i++;
                         if (tetris[i][j] == '#') {
-                            System.out.println("Final");
+                            return somador;
                         }
+
+                        i++;
+
                     }
                     //volta esquerada descendo
                     if (tetris[i][j] == '/') {
-                        System.out.println("chueguei");
                         x = false;
                         j -= 2;
-                        System.out.println("foi pra esquerda descendo");
                     }
                 }
                 //continua direita se nao tiver subindo ou descendo
                 if (Character.isDigit(tetris[i][j])) {
-                    valores = String.valueOf(tetris[i][j]);
+                    sequencia(i, j, "direita");
                 }
-                System.out.println("seguiu direita");
                 j++;
 
             }
@@ -97,27 +96,26 @@ public class CalculoRota {
 
             //corre pra esquerda
             while (x == false) {
-                System.out.println("false");
+
                 if (tetris[i][j] == '#') {
-                    System.out.println("Final");
+                    return somador;
                 }
                 //sobe
                 if (tetris[i][j] == '\\') {
                     i--;
                     while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
                         if (Character.isDigit(tetris[i][j])) {
-                            valores = String.valueOf(tetris[i][j]);
+                            sequencia(i, j, "cima");
+
                         }
                         if (tetris[i][j] == '#') {
-                            System.out.println("Final");
+                            return somador;
                         }
-                        System.out.println("subiu");
                         i--;
                     }
                     if (tetris[i][j] == '/') {
                         x = true;
                         j += 2;
-                        System.out.println("foi pra direita subindo");
                     }
                 }
                 //desce
@@ -125,35 +123,83 @@ public class CalculoRota {
                     i++;
                     while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
                         if (Character.isDigit(tetris[i][j])) {
-                            valores = String.valueOf(tetris[i][j]);
+                            sequencia(i, j, "baixo");
+
                         }
-                        System.out.println("desceu");
                         if (tetris[i][j] == '#') {
-                            System.out.println("Final");
+                            return somador;
                         }
                         i++;
                     }
                     if (tetris[i][j] == '\\') {
                         x = true;
                         j += 2;
-                        System.out.println("foi pra direita descendo");
                     }
                 }
                 //segue esquerda
                 if (Character.isDigit(tetris[i][j])) {
-                    valores = String.valueOf(tetris[i][j]);
+                    sequencia(i, j, "esquerda");
+
                 }
-                System.out.println("seguiu esquerda");
                 j--;
 
             }
         }
-        System.out.println("final");
         return somador;
     }
 
-    public void somaTudo(boolean)
 
+    public void sequencia(int i, int j, String estado) {
+        String acumula = "";
 
+        if (estado.equals("cima")) {
+            while (Character.isDigit(tetris[i][j])) {
+                acumula += String.valueOf(tetris[i][j]);
+                i--;
+            }
+        }
+        if (estado.equals("baixo")) {
+            while (Character.isDigit(tetris[i][j])) {
+                acumula += String.valueOf(tetris[i][j]);
+                i++;
+            }
+        }
+        if (estado.equals("esquerda")) {
+            while (Character.isDigit(tetris[i][j])) {
+                acumula += String.valueOf(tetris[i][j]);
+                j--;
+            }
+            reverseString(acumula);
+        }
+        if (estado.equals("direita")) {
+            while (Character.isDigit(tetris[i][j])) {
+                acumula += String.valueOf(tetris[i][j]);
+                j++;
+            }
+        }
+        System.out.println(acumula);
+
+        somador+= Long.parseLong(acumula);
+
+    }
+
+    public static String reverseString(String str) {
+        char[] chars = str.toCharArray();
+        int left = 0;
+        int right = chars.length - 1;
+
+        while (left < right) {
+            char temp = chars[left];
+            chars[left] = chars[right];
+            chars[right] = temp;
+            left++;
+            right--;
+        }
+
+        return new String(chars);
+    }
 }
+
+
+
 

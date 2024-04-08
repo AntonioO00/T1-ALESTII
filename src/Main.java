@@ -6,7 +6,7 @@ import java.io.FileReader;
 public class Main {
     public static void main(String[] args) {
         char[][] matriz;
-        String teste = "casosdeteste/casoC100.txt";
+        String teste = "casosdeteste/casoC50.txt";
 
         try {
             // Leitura da primeira linha
@@ -41,7 +41,9 @@ public class Main {
             }
             CalculoRota calculoRota = new CalculoRota(matriz);
             calculoRota.calculo();
-            System.out.println(calculoRota.LeituraMatriz());
+            calculoRota.LeituraMatriz();
+            System.out.println(calculoRota.getSomador());
+
 
 
         } catch (Exception e) {
