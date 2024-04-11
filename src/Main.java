@@ -6,13 +6,12 @@ import java.io.FileReader;
 public class Main {
     public static void main(String[] args) {
         char[][] matriz;
-        String teste = "casosdeteste/casoC50.txt";
+         String teste = "casosdeteste/casoC50.txt";
 
         try {
             // Leitura da primeira linha
             BufferedReader pr = new BufferedReader(new FileReader(teste));
             String primeiraLinha = pr.readLine();
-            System.out.println(primeiraLinha);
             pr.close();
 
             //Definindo o tamanho da matriz de acordo com o valor passado na primeira linha
@@ -39,10 +38,11 @@ public class Main {
                 }
                 System.out.println();
             }
-            CalculoRota calculoRota = new CalculoRota(matriz);
-            calculoRota.calculo();
+
+            CalculoRota calculoRota = new CalculoRota(matriz);;
             calculoRota.LeituraMatriz();
-            System.out.println(calculoRota.getSomador());
+            System.out.println();
+            System.out.println("Valor Total: "+calculoRota.getSomador());
 
 
 

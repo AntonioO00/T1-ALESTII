@@ -1,23 +1,19 @@
 package Calculo;
 
-import org.w3c.dom.ls.LSOutput;
-
-import java.util.Arrays;
-
 public class CalculoRota {
-    char[][] tetris;
-    int i, j = 0;
+    char[][] matriz;
     Long somador = 0L;
-    String valores = "";
+    int i;
+    int j;
 
     public CalculoRota(char[][] matriz) {
-        tetris = matriz;
+        this.matriz = matriz;
     }
 
     public int coordenada() {
         int linha = 0;
-        for (int i = 0; i < tetris.length - 1; i++) {
-            if (tetris[i][0] == '-') {
+        for (int i = 0; i < matriz.length - 1; i++) {
+            if (matriz[i][0] == '-') {
                 linha = i;
             }
         }
@@ -34,114 +30,124 @@ public class CalculoRota {
 
     public Long LeituraMatriz() {
 
-        int i = coordenada();
-        int j = 0;
+        i = coordenada();
+        j = 0;
         boolean x = true;
+        boolean[][] processed = new boolean[matriz.length][matriz[0].length];
 
-        while (tetris[i][j] != '#') {
 
-            //corre pra direita
+        while (matriz[i][j] != '#') {
+
+            //Corre para a direita
             while (x == true) {
-
-                if (tetris[i][j] == '#') {
+                // Confirma se nao chegou ao fim
+                if (matriz[i][j] == '#') {
                     return somador;
                 }
-                //subindo
-                if (tetris[i][j] == '/') {
-                    i--;
-                    while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
-                        if (Character.isDigit(tetris[i][j])) {
-                            sequencia(i, j, "cima");
-                        }
-                        if (tetris[i][j] == '#') {
-                            return somador;
-                        }
+
+                if (!processed[i][j]) {
+                    // Marca o elemento como processado
+                    processed[i][j] = true;
+
+                    //Sobe
+                    if (matriz[i][j] == '/') {
                         i--;
-                    }
-                    //volta esquerda subindo
-                    if (tetris[i][j] == '\\') {
-                        x = false;
-                        j -= 2;
-                    }
-                }
-
-                //desce
-                if (tetris[i][j] == '\\') {
-                    i++;
-                    while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
-                        if (Character.isDigit(tetris[i][j])) {
-                            sequencia(i, j, "baixo");
+                        while (matriz[i][j] != '/' && matriz[i][j] != '\\') {
+                            if (Character.isDigit(matriz[i][j])) {
+                                somaNumeros(i, j, "cima");
+                            }
+                            if (matriz[i][j] == '#') {
+                                return somador;
+                            }
+                            i--;
                         }
-                        if (tetris[i][j] == '#') {
-                            return somador;
+                        //Volta para esquerda depois de subir
+                        if (matriz[i][j] == '\\') {
+                            x = false;
+                            j -= 2;
                         }
+                    }
 
+                    //Desce
+                    if (matriz[i][j] == '\\') {
                         i++;
+                        while (matriz[i][j] != '/' && matriz[i][j] != '\\') {
+                            if (Character.isDigit(matriz[i][j])) {
+                                somaNumeros(i, j, "baixo");
+                            }
+                            if (matriz[i][j] == '#') {
+                                return somador;
+                            }
 
-                    }
-                    //volta esquerada descendo
-                    if (tetris[i][j] == '/') {
-                        x = false;
-                        j -= 2;
-                    }
-                }
-                //continua direita se nao tiver subindo ou descendo
-                if (Character.isDigit(tetris[i][j])) {
-                    sequencia(i, j, "direita");
-                }
-                j++;
+                            i++;
 
+                        }
+                        //volta esquerada depois de descer
+                        if (matriz[i][j] == '/') {
+                            x = false;
+                            j -= 2;
+                        }
+                    }
+                    //Segue pela direita caso nao precise subir ou descer
+                    if (Character.isDigit(matriz[i][j])) {
+                        somaNumeros(i, j, "direita");
+                    }
+                    j++;
+
+                }
             }
 
-
-            //corre pra esquerda
+            //Corre para a esquerda
             while (x == false) {
 
-                if (tetris[i][j] == '#') {
+                if (matriz[i][j] == '#') {
                     return somador;
                 }
-                //sobe
-                if (tetris[i][j] == '\\') {
-                    i--;
-                    while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
-                        if (Character.isDigit(tetris[i][j])) {
-                            sequencia(i, j, "cima");
+                if (!processed[i][j]) {
+                    // Marca o elemento como processado
+                    processed[i][j] = true;
 
-                        }
-                        if (tetris[i][j] == '#') {
-                            return somador;
-                        }
+                    //sobe
+                    if (matriz[i][j] == '\\') {
                         i--;
-                    }
-                    if (tetris[i][j] == '/') {
-                        x = true;
-                        j += 2;
-                    }
-                }
-                //desce
-                if (tetris[i][j] == '/') {
-                    i++;
-                    while (tetris[i][j] != '/' && tetris[i][j] != '\\') {
-                        if (Character.isDigit(tetris[i][j])) {
-                            sequencia(i, j, "baixo");
-
+                        while (matriz[i][j] != '/' && matriz[i][j] != '\\') {
+                            if (Character.isDigit(matriz[i][j])) {
+                                somaNumeros(i, j, "cima");
+                            }
+                            if (matriz[i][j] == '#') {
+                                return somador;
+                            }
+                            i--;
                         }
-                        if (tetris[i][j] == '#') {
-                            return somador;
+                        if (matriz[i][j] == '/') {
+                            x = true;
+                            j += 2;
                         }
+                    }
+                    //Desce
+                    if (matriz[i][j] == '/') {
                         i++;
-                    }
-                    if (tetris[i][j] == '\\') {
-                        x = true;
-                        j += 2;
-                    }
-                }
-                //segue esquerda
-                if (Character.isDigit(tetris[i][j])) {
-                    sequencia(i, j, "esquerda");
+                        while (matriz[i][j] != '/' && matriz[i][j] != '\\') {
+                            if (Character.isDigit(matriz[i][j])) {
+                                somaNumeros(i, j, "baixo");
 
+                            }
+                            if (matriz[i][j] == '#') {
+                                return somador;
+                            }
+                            i++;
+                        }
+                        if (matriz[i][j] == '\\') {
+                            x = true;
+                            j += 2;
+                        }
+                    }
+                    //segue esquerda
+                    if (Character.isDigit(matriz[i][j])) {
+                        somaNumeros(i, j, "esquerda");
+                    }
+                    j--;
                 }
-                j--;
 
             }
         }
@@ -149,55 +155,51 @@ public class CalculoRota {
     }
 
 
-    public void sequencia(int i, int j, String estado) {
-        String acumula = "";
+    public void somaNumeros(int l, int c, String estado) {
+        StringBuilder acumula = new StringBuilder();
+        try {
+            if (estado.equals("cima")) {
+                while (l >= 0 && Character.isDigit(matriz[l][c])) {
+                    acumula.insert(0, matriz[l][c]);
+                    l--;
+                }
+            } else if (estado.equals("baixo")) {
+                while (l < matriz.length && Character.isDigit(matriz[l][c])) {
+                    acumula.append(matriz[l][c]);
+                    l++;
+                }
+            } else if (estado.equals("esquerda")) {
+                while (c >= 0 && Character.isDigit(matriz[l][c])) {
+                    acumula.insert(0, matriz[l][c]);
+                    c--;
+                }
+            } else if (estado.equals("direita")) {
+                while (c < matriz[0].length && Character.isDigit(matriz[l][c])) {
+                    acumula.append(matriz[l][c]);
+                    c++;
+                }
+            } else {
+                System.err.println("Estado inválido.");
+                return;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Erro: Índice fora dos limites da matriz.");
+            return;
+        }
 
-        if (estado.equals("cima")) {
-            while (Character.isDigit(tetris[i][j])) {
-                acumula += String.valueOf(tetris[i][j]);
-                i--;
-            }
-        }
-        if (estado.equals("baixo")) {
-            while (Character.isDigit(tetris[i][j])) {
-                acumula += String.valueOf(tetris[i][j]);
-                i++;
-            }
-        }
-        if (estado.equals("esquerda")) {
-            while (Character.isDigit(tetris[i][j])) {
-                acumula += String.valueOf(tetris[i][j]);
-                j--;
-            }
-            reverseString(acumula);
-        }
-        if (estado.equals("direita")) {
-            while (Character.isDigit(tetris[i][j])) {
-                acumula += String.valueOf(tetris[i][j]);
-                j++;
-            }
-        }
-        System.out.println(acumula);
+        try {
+            if (acumula.length() > 1) {
 
-        somador+= Long.parseLong(acumula);
+                somador += Long.parseLong(acumula.toString());
+            } else {
 
+                somador += Character.getNumericValue(acumula.charAt(0));
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Erro ao converter String para Long.");
+        }
     }
 
-    public static String reverseString(String str) {
-        char[] chars = str.toCharArray();
-        int left = 0;
-        int right = chars.length - 1;
-
-        while (left < right) {
-            char temp = chars[left];
-            chars[left] = chars[right];
-            chars[right] = temp;
-            left++;
-            right--;
-        }
-
-        return new String(chars);
-    }
 }
 
 
